@@ -1,0 +1,8 @@
+# Editor temps
+*~
+
+# Compiled output
+elm.js
+
+# External packages
+elm-stuff/

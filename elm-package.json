@@ -1,0 +1,13 @@
+{
+    "version": "0.0.1",
+    "summary": "A test app to see how well Elm visualizes Chess",
+    "repository": "https://github.com/michaelwisely/elm-chess.git",
+    "license": "BSD3",
+    "source-directories": [
+        "."
+    ],
+    "exposed-modules": [],
+    "dependencies": {
+        "elm-lang/core": "1.1.1 <= v < 2.0.0"
+    }
+}
