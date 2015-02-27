@@ -64,16 +64,15 @@ type alias Piece = (Player, Type)
 type alias GameState = List (List (Maybe Piece))
 
 defaultGame : GameState
-defaultGame = [
- [Just (Black, Rook), Just (Black, Knight), Just (Black, Bishop), Just (Black, Queen), Just (Black, King), Just (Black, Bishop), Just (Black, Knight), Just (Black, Rook)],
- [Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn)],
- [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing],
- [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing],
- [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing],
- [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing],
- [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing],
- [Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn)],
- [Just (White, Rook), Just (White, Knight), Just (White, Bishop), Just (White, Queen), Just (White, King), Just (White, Bishop), Just (White, Knight), Just (White, Rook)]]
+defaultGame = [ [Just (Black, Rook), Just (Black, Knight), Just (Black, Bishop), Just (Black, Queen), Just (Black, King), Just (Black, Bishop), Just (Black, Knight), Just (Black, Rook)]
+              , [Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn)]
+              , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
+              , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
+              , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
+              , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
+              , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
+              , [Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn)]
+              , [Just (White, Rook), Just (White, Knight), Just (White, Bishop), Just (White, Queen), Just (White, King), Just (White, Bishop), Just (White, Knight), Just (White, Rook)]]
 
 
 
