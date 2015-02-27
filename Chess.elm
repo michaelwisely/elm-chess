@@ -147,14 +147,13 @@ drawSpace rank file p =
         space = rect (toFloat pieceHeight) (toFloat pieceWidth)
               |> filled color
               |> move pos
-        element = case p of
-                    Just piece -> pieceImage piece
-                    Nothing -> empty
-        form = element
-             |> toForm
-             |> move pos
     in
-      group [space, form]
+      case p of
+        Just piece -> group [space
+                            , pieceImage piece
+                                |> toForm
+                                |> move pos]
+        Nothing -> space
 
 drawRow : Int -> Row -> List Form
 drawRow y = List.indexedMap (drawSpace y)
