@@ -1,4 +1,6 @@
 import Graphics.Element (..)
+import Graphics.Collage (..)
+import Color
 import Signal
 import Signal (Signal)
 import List
@@ -47,6 +49,12 @@ be an empty list (no objects at the start):
 
 ------------------------------------------------------------------------------}
 
+pieceHeight : Int
+pieceHeight = 50
+
+pieceWidth : Int
+pieceWidth = 50
+
 type Type
     = Pawn
     | Rook
@@ -61,7 +69,11 @@ type Player
 
 type alias Piece = (Player, Type)
 
-type alias GameState = List (List (Maybe Piece))
+type alias Row = List (Maybe Piece)
+
+type alias Board = List Row
+
+type alias GameState = Board
 
 defaultGame : GameState
 defaultGame = [ [Just (Black, Rook), Just (Black, Knight), Just (Black, Bishop), Just (Black, Queen), Just (Black, King), Just (Black, Bishop), Just (Black, Knight), Just (Black, Rook)]
@@ -87,7 +99,7 @@ Task: redefine `stepGame` to use the UserInput and GameState
 ------------------------------------------------------------------------------}
 
 stepGame : Input -> GameState -> GameState
-stepGame {timeDelta,userInput} gameState =
+stepGame {timeDelta, userInput} gameState =
     gameState
 
 
@@ -115,24 +127,46 @@ pieceImage (p, t) =
                         Black -> "black"
         src = "images/pieces/" ++ playerColor ++ "-" ++ pieceType ++ ".svg"
     in
-      image 50 50 src
+      image pieceHeight pieceWidth src
 
-drawSpace : Maybe Piece -> Element
-drawSpace x =
-    case x of
-      Just piece -> pieceImage piece
-      Nothing -> spacer 50 50
+toCoord : Int -> Int -> (Float, Float)
+toCoord rank file =
+    let
+        fWidth = toFloat pieceWidth
+        fHeight = toFloat pieceHeight
+        x = (toFloat file * fWidth) - fWidth * 3.5
+        y = (toFloat rank * fHeight) - fHeight * 3.5
+    in
+      (x, y)
+
+drawSpace : Int -> Int -> Maybe Piece -> Form
+drawSpace rank file p =
+    let
+        pos = toCoord rank file
+        color = if (rank + file) % 2 == 0 then Color.white else Color.blue
+        space = rect (toFloat pieceHeight) (toFloat pieceWidth)
+              |> filled color
+              |> move pos
+        element = case p of
+                    Just piece -> pieceImage piece
+                    Nothing -> empty
+        form = element
+             |> toForm
+             |> move pos
+    in
+      group [space, form]
+
+drawRow : Int -> Row -> List Form
+drawRow y = List.indexedMap (drawSpace y)
+
+drawBoard : Board -> List Form
+drawBoard board = List.indexedMap drawRow board
+                |> List.concat
 
 display : (Int,Int) -> GameState -> Element
 display (w,h) gameState =
-    let
-        drawRow = List.map drawSpace
-        drawBoard = List.map drawRow
-        board = drawBoard gameState
-    in
-      board
-          |> List.map (flow right)
-          |> flow down
+    drawBoard gameState
+        |> collage (pieceWidth * 8) (pieceHeight * 8)
 
 {-- That's all folks! ---------------------------------------------------------
 
