@@ -131,8 +131,9 @@ display (w,h) gameState =
         drawBoard = List.map drawRow
         board = drawBoard gameState
     in
-      flow down (List.map (flow right) board)
-
+      board
+          |> List.map (flow right)
+          |> flow down
 
 {-- That's all folks! ---------------------------------------------------------
 
