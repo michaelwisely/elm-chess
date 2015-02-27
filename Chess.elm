@@ -1,6 +1,7 @@
 import Graphics.Element (..)
 import Signal
 import Signal (Signal)
+import List
 import Text
 import Time
 import Window
@@ -46,11 +47,34 @@ be an empty list (no objects at the start):
 
 ------------------------------------------------------------------------------}
 
-type alias GameState = {}
+type Type
+    = Pawn
+    | Rook
+    | Bishop
+    | Knight
+    | King
+    | Queen
+
+type Player
+    = Black
+    | White
+
+type alias Piece = (Player, Type)
+
+type alias GameState = List (List (Maybe Piece))
 
 defaultGame : GameState
-defaultGame =
-    {}
+defaultGame = [
+ [Just (Black, Rook), Just (Black, Knight), Just (Black, Bishop), Just (Black, Queen), Just (Black, King), Just (Black, Bishop), Just (Black, Knight), Just (Black, Rook)],
+ [Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn)],
+ [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing],
+ [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing],
+ [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing],
+ [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing],
+ [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing],
+ [Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn)],
+ [Just (White, Rook), Just (White, Knight), Just (White, Bishop), Just (White, Queen), Just (White, King), Just (White, Bishop), Just (White, Knight), Just (White, Rook)]]
+
 
 
 
@@ -78,10 +102,37 @@ Task: redefine `display` to use the GameState you defined in part 2.
 
 ------------------------------------------------------------------------------}
 
+pieceImage : (Player, Type) -> Element
+pieceImage (p, t) =
+    let
+        pieceType = case t of
+                      Pawn -> "pawn"
+                      Rook -> "rook"
+                      Bishop -> "bishop"
+                      Knight -> "knight"
+                      King -> "king"
+                      Queen -> "queen"
+        playerColor = case p of
+                        White -> "white"
+                        Black -> "black"
+        src = "images/pieces/" ++ playerColor ++ "-" ++ pieceType ++ ".svg"
+    in
+      image 50 50 src
+
+drawSpace : Maybe Piece -> Element
+drawSpace x =
+    case x of
+      Just piece -> pieceImage piece
+      Nothing -> spacer 50 50
+
 display : (Int,Int) -> GameState -> Element
 display (w,h) gameState =
-    Text.asText gameState
-
+    let
+        drawRow = List.map drawSpace
+        drawBoard = List.map drawRow
+        board = drawBoard gameState
+    in
+      flow down (List.map (flow right) board)
 
 
 {-- That's all folks! ---------------------------------------------------------
