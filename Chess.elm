@@ -70,7 +70,6 @@ defaultGame = [ [Just (Black, Rook), Just (Black, Knight), Just (Black, Bishop),
               , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
               , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
               , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
-              , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
               , [Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn)]
               , [Just (White, Rook), Just (White, Knight), Just (White, Bishop), Just (White, Queen), Just (White, King), Just (White, Bishop), Just (White, Knight), Just (White, Rook)]]
 
