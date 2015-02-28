@@ -49,12 +49,6 @@ be an empty list (no objects at the start):
 
 ------------------------------------------------------------------------------}
 
-pieceHeight : Int
-pieceHeight = 50
-
-pieceWidth : Int
-pieceWidth = 50
-
 type Type
     = Pawn
     | Rook
@@ -112,8 +106,8 @@ Task: redefine `display` to use the GameState you defined in part 2.
 
 ------------------------------------------------------------------------------}
 
-pieceImage : (Player, Type) -> Element
-pieceImage (p, t) =
+pieceImage : Int -> (Player, Type) -> Element
+pieceImage size (p, t) =
     let
         pieceType = case t of
                       Pawn -> "pawn"
@@ -127,45 +121,54 @@ pieceImage (p, t) =
                         Black -> "black"
         src = "images/pieces/" ++ playerColor ++ "-" ++ pieceType ++ ".svg"
     in
-      image pieceHeight pieceWidth src
+      image size size src
 
-toCoord : Int -> Int -> (Float, Float)
-toCoord rank file =
+toCoord : Float -> Int -> Int -> (Float, Float)
+toCoord size rank file =
     let
-        fWidth = toFloat pieceWidth
-        fHeight = toFloat pieceHeight
-        x = (toFloat file * fWidth) - fWidth * 3.5
-        y = (toFloat rank * fHeight) - fHeight * 3.5
+        x = (toFloat file * size) - size * 3.5
+        y = (toFloat rank * size) - size * 3.5
     in
       (x, y)
 
-drawSpace : Int -> Int -> Maybe Piece -> Form
-drawSpace rank file p =
+drawSpace : Float -> Int -> Int -> Maybe Piece -> Form
+drawSpace spaceSize rank file p =
     let
-        pos = toCoord rank file
-        color = if (rank + file) % 2 == 0 then Color.white else Color.blue
-        space = rect (toFloat pieceHeight) (toFloat pieceWidth)
+        pos = toCoord spaceSize rank file
+        imageSize = round spaceSize
+        color = if (rank + file) % 2 == 0 then
+                    Color.white
+                else
+                    Color.blue
+        space = square spaceSize
               |> filled color
               |> move pos
     in
       case p of
         Just piece -> group [space
-                            , pieceImage piece
+                            , pieceImage imageSize piece
                                 |> toForm
                                 |> move pos]
         Nothing -> space
 
-drawRow : Int -> Row -> List Form
-drawRow y = List.indexedMap (drawSpace y)
+drawRow : Int -> Int -> Row -> List Form
+drawRow pageWidth rank =
+    let
+        spaceSize = (toFloat pageWidth) / 8.0
+    in
+      List.indexedMap (drawSpace spaceSize rank)
 
-drawBoard : Board -> List Form
-drawBoard board = List.indexedMap drawRow board
-                |> List.concat
+drawBoard : Int -> Board -> List Form
+drawBoard pageSize board = List.indexedMap (drawRow pageSize) board
+                     |> List.concat
 
 display : (Int,Int) -> GameState -> Element
 display (w,h) gameState =
-    drawBoard gameState
-        |> collage (pieceWidth * 8) (pieceHeight * 8)
+    let
+        pageSize = List.minimum [w, h]
+    in
+      drawBoard pageSize gameState
+          |> collage pageSize pageSize
 
 {-- That's all folks! ---------------------------------------------------------
 
