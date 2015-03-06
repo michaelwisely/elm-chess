@@ -1,5 +1,6 @@
 import Graphics.Element (..)
 import Graphics.Collage (..)
+import Chess
 import Color
 import Signal
 import Signal (Signal)
@@ -49,37 +50,7 @@ be an empty list (no objects at the start):
 
 ------------------------------------------------------------------------------}
 
-type Type
-    = Pawn
-    | Rook
-    | Bishop
-    | Knight
-    | King
-    | Queen
-
-type Player
-    = Black
-    | White
-
-type alias Piece = (Player, Type)
-
-type alias Row = List (Maybe Piece)
-
-type alias Board = List Row
-
-type alias GameState = Board
-
-defaultGame : GameState
-defaultGame = [ [Just (Black, Rook), Just (Black, Knight), Just (Black, Bishop), Just (Black, Queen), Just (Black, King), Just (Black, Bishop), Just (Black, Knight), Just (Black, Rook)]
-              , [Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn), Just (Black, Pawn)]
-              , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
-              , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
-              , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
-              , [Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing]
-              , [Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn), Just (White, Pawn)]
-              , [Just (White, Rook), Just (White, Knight), Just (White, Bishop), Just (White, Queen), Just (White, King), Just (White, Bishop), Just (White, Knight), Just (White, Rook)]]
-
-
+type alias GameState = List Chess.Piece
 
 
 {-- Part 3: Update the game ---------------------------------------------------
@@ -105,23 +76,6 @@ How should the GameState be displayed to the user?
 Task: redefine `display` to use the GameState you defined in part 2.
 
 ------------------------------------------------------------------------------}
-
-pieceImage : Int -> (Player, Type) -> Element
-pieceImage size (p, t) =
-    let
-        pieceType = case t of
-                      Pawn -> "pawn"
-                      Rook -> "rook"
-                      Bishop -> "bishop"
-                      Knight -> "knight"
-                      King -> "king"
-                      Queen -> "queen"
-        playerColor = case p of
-                        White -> "white"
-                        Black -> "black"
-        src = "images/pieces/" ++ playerColor ++ "-" ++ pieceType ++ ".svg"
-    in
-      image size size src
 
 toCoord : Float -> Int -> Int -> (Float, Float)
 toCoord size rank file =
@@ -188,7 +142,7 @@ input =
 
 gameState : Signal GameState
 gameState =
-    Signal.foldp stepGame defaultGame input
+    Signal.foldp stepGame (toPieces defaultBoard) input
 
 
 main : Signal Element
